@@ -1120,7 +1120,10 @@ class Servicios {
 		$sql	=	"show columns from ".$tabla;
 		$res 	=	$this->query($sql,0);
 
-		$ocultar = array("fechacrea","fechamodi","usuacrea","usuamodi","idusuario",'leyenda1','leyenda2','leyenda3');
+		if ($tabla == 'dbformularios') {
+			$ocultar = array("fechacrea","fechamodi","usuacrea","usuamodi","idusuario",'leyenda1','leyenda2','leyenda3');
+		}
+
 
 		$camposEscondido = "";
 		$lblObligatorio = '';
