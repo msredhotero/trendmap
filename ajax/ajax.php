@@ -148,7 +148,7 @@ function frmAjaxModificar($serviciosFunciones, $serviciosReferencias) {
 
    $formulario = $serviciosFunciones->camposTablaModificar($id, $idTabla,$modificar,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-   echo utf8_decode($formulario);
+   echo $formulario;
 }
 
 

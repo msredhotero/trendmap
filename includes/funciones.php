@@ -16,7 +16,7 @@ class Servicios {
 			foreach ($ar as $i) {
 				$contenido .= $rowTT[$i].$delimitador;
 			}
-			$cad .= '<option value="'.$rowTT[0].'">'.utf8_encode(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
+			$cad .= '<option value="'.$rowTT[0].'">'.(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
 		}
 		return $cad;
 	}
@@ -30,9 +30,9 @@ class Servicios {
 				$contenido .= $rowTT[$i].$delimitador;
 			}
 			if ($rowTT[0] == $idSelect) {
-				$cad .= '<option value="'.$rowTT[0].'" selected="selected">'.utf8_encode(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
+				$cad .= '<option value="'.$rowTT[0].'" selected="selected">'.(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
 			} else {
-				$cad .= '<option value="'.$rowTT[0].'">'.utf8_encode(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
+				$cad .= '<option value="'.$rowTT[0].'">'.(substr($contenido,0,strlen($contenido)-strlen($delimitador))).'</option>';
 			}
 		}
 		return $cad;
@@ -243,7 +243,7 @@ class Servicios {
 			}
 		}
 
-		//'.utf8_encode($cadRows).' verificar al subir al servidor
+		//'.($cadRows).' verificar al subir al servidor
 
 		$cadView = $cadView.'
 			<table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="example">
@@ -344,7 +344,7 @@ class Servicios {
 			}
 		}
 
-		//'.utf8_encode($cadRows).' verificar al subir al servidor
+		//'.($cadRows).' verificar al subir al servidor
 
 		$cadView = $cadView.'
 			<table class="table table-striped table-responsive" id="example">
@@ -1312,7 +1312,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -1371,7 +1371,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'<input type="hidden" id="accion" name="accion" value="'.$accion.'"/>'.'<input type="hidden" id="id" name="id" value="'.$id.'"/>';
 				}
 			}
-			/* <input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
@@ -1577,7 +1577,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -1634,7 +1634,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'<input type="hidden" id="accion" name="accion" value="'.$accion.'"/>'.'<input type="hidden" id="id" name="id" value="'.$id.'"/>';
 				}
 			}
-			/* <input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
@@ -1749,7 +1749,7 @@ class Servicios {
 									<div class="form-group col-md-6">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-12">
-											<input type="text" class="form-control" value="'.utf8_encode(mysql_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+											<input type="text" class="form-control" value="'.(mysql_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
 										</div>
 									</div>
 
@@ -2021,7 +2021,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea readonly="readonly" type="text" rows="2" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea readonly="readonly" type="text" rows="2" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -2080,7 +2080,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'';
 				}
 			}
-			/* <input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
