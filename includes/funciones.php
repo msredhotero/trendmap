@@ -11,7 +11,7 @@ class Servicios {
 	function devolverSelectBox($datos, $ar, $delimitador) {
 
 		$cad		= '';
-		while ($rowTT = mysql_fetch_array($datos)) {
+		while ($rowTT = mysqli_fetch_array($datos)) {
 			$contenido	= '';
 			foreach ($ar as $i) {
 				$contenido .= $rowTT[$i].$delimitador;
@@ -24,7 +24,7 @@ class Servicios {
 	function devolverSelectBoxActivo($datos, $ar, $delimitador, $idSelect) {
 
 		$cad		= '';
-		while ($rowTT = mysql_fetch_array($datos)) {
+		while ($rowTT = mysqli_fetch_array($datos)) {
 			$contenido	= '';
 			foreach ($ar as $i) {
 				$contenido .= $rowTT[$i].$delimitador;
@@ -131,7 +131,7 @@ class Servicios {
 			$classEli = 'varborrar';
 			$idresultados = "resultados";
 		}*/
-		while ($row = mysql_fetch_array($datos)) {
+		while ($row = mysqli_fetch_array($datos)) {
 			$cadsubRows = '';
 			$cadRows = $cadRows.'
 
@@ -297,7 +297,7 @@ class Servicios {
 			$classEli = 'varborrar';
 			$idresultados = "resultados";
 		}*/
-		while ($row = mysql_fetch_array($datos)) {
+		while ($row = mysqli_fetch_array($datos)) {
 			$cadsubRows = '';
 			$cadRows = $cadRows.'
 
@@ -405,7 +405,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				$label = $row[0];
 				$i = 0;
 
@@ -760,7 +760,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				$label = $row[0];
 				$i = 0;
 
@@ -1053,7 +1053,6 @@ class Servicios {
 		switch ($tabla) {
 			case 'dbformularios':
 				$sqlMod = "select idformulario,
-										refrespuestas,
 										nombre,
 										apellido,
 										telefono,
@@ -1120,6 +1119,8 @@ class Servicios {
 		$sql	=	"show columns from ".$tabla;
 		$res 	=	$this->query($sql,0);
 
+		$ocultar = array("fechacrea");
+
 		if ($tabla == 'dbformularios') {
 			$ocultar = array("fechacrea","fechamodi","usuacrea","usuamodi","idusuario",'leyenda1','leyenda2','leyenda3');
 		}
@@ -1146,7 +1147,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				$label = $row[0];
 				$i = 0;
 
@@ -1182,7 +1183,7 @@ class Servicios {
 							<div class="input-group">
                         <span class="input-group-addon">$</span>
                         <div class="form-line">
-                           <input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" '.$lblObligatorio.'>
+                           <input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.$this->mysqli_result($resMod,0,$row[0]).'" '.$lblObligatorio.'>
                         </div>
                         <span class="input-group-addon">.00</span>
                      </div>
@@ -1220,10 +1221,10 @@ class Servicios {
 								$campo = strtolower($row[0]);
 
 								$activo = '';
-								if (mysql_result($resMod,0,$row[0])==1){
+								if ($this->mysqli_result($resMod,0,$row[0])==1){
 									$activo = 'checked';
 								}
-								$valorBit = mysql_result($resMod,0,$row[0]);
+								$valorBit = $this->mysqli_result($resMod,0,$row[0]);
 
 								$form	=	$form.'
 
@@ -1261,7 +1262,7 @@ class Servicios {
 													<i class="material-icons">date_range</i>
 											  </span>
 											  <div class="form-line">
-													<input type="text" class="form-control date" value="'.mysql_result($resMod,0,$row[0]).'" placeholder="Ej: 2019-01-01" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
+													<input type="text" class="form-control date" value="'.$this->mysqli_result($resMod,0,$row[0]).'" placeholder="Ej: 2019-01-01" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
 											  </div>
 										 </div>
 									</div>
@@ -1292,7 +1293,7 @@ class Servicios {
 										<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 											<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 											<div class="input-group bootstrap-timepicker col-md-6">
-												<input id="timepicker2" value="'.mysql_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
+												<input id="timepicker2" value="'.$this->mysqli_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
 												<span class="input-group-addon">
 <span class="glyphicon glyphicon-time"></span>
 </span>
@@ -1312,7 +1313,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.($this->mysqli_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -1350,7 +1351,7 @@ class Servicios {
 													<label class="form-label">'.$label.'</label>
 													<div class="form-group">
 														<div class="form-line">
-															<input value="'.(mysql_result($resMod,0,$row[0])).'" type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
+															<input value="'.($this->mysqli_result($resMod,0,$row[0])).'" type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
 
 														</div>
 													</div>
@@ -1371,7 +1372,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'<input type="hidden" id="accion" name="accion" value="'.$accion.'"/>'.'<input type="hidden" id="id" name="id" value="'.$id.'"/>';
 				}
 			}
-			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.($this->mysqli_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
@@ -1422,7 +1423,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				$label = $row[0];
 				$i = 0;
 				foreach ($lblcambio as $cambio) {
@@ -1450,7 +1451,7 @@ class Servicios {
 							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
 							<div class="input-group col-md-12">
 								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" required>
+								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.$this->mysqli_result($resMod,0,$row[0]).'" required>
 								<span class="input-group-addon">.00</span>
 							</div>
 						</div>
@@ -1498,7 +1499,7 @@ class Servicios {
 								$campo = strtolower($row[0]);
 
 								$activo = '';
-								if (mysql_result($resMod,0,$row[0])==1){
+								if ($this->mysqli_result($resMod,0,$row[0])==1){
 									$activo = 'checked';
 								}
 
@@ -1525,10 +1526,10 @@ class Servicios {
 									<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="'.$campo.'" data-link-format="yyyy-mm-dd">
-											<input class="form-control" value="'.mysql_result($resMod,0,$row[0]).'" size="50" type="text" value="" readonly>
+											<input class="form-control" value="'.$this->mysqli_result($resMod,0,$row[0]).'" size="50" type="text" value="" readonly>
 											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 										</div>
-										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'" />
+										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.$this->mysqli_result($resMod,0,$row[0]).'" />
 									</div>
 
 									';
@@ -1557,7 +1558,7 @@ class Servicios {
 										<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 											<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 											<div class="input-group bootstrap-timepicker col-md-6">
-												<input id="timepicker2" value="'.mysql_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
+												<input id="timepicker2" value="'.$this->mysqli_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
 												<span class="input-group-addon">
 <span class="glyphicon glyphicon-time"></span>
 </span>
@@ -1577,7 +1578,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.($this->mysqli_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -1615,7 +1616,7 @@ class Servicios {
 												<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 													<div class="input-group col-md-12">
-														<input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+														<input type="text" value="'.($this->mysqli_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
 													</div>
 												</div>
 
@@ -1634,7 +1635,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'<input type="hidden" id="accion" name="accion" value="'.$accion.'"/>'.'<input type="hidden" id="id" name="id" value="'.$id.'"/>';
 				}
 			}
-			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.($this->mysqli_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
@@ -1656,7 +1657,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				if ($row[3] != 'PRI') {
 					if (strpos($row[1],"decimal") !== false) {
 						$form	=	$form.'
@@ -1665,7 +1666,7 @@ class Servicios {
 							<label for="'.$row[0].'" class="control-label" style="text-align:left">'.ucwords($row[0]).'</label>
 							<div class="input-group col-md-12">
 								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.$row[0].'" name="'.$row[0].'" value="'.mysql_result($resTipoVenta,0,$row[0]).'" required>
+								<input type="text" class="form-control" id="'.$row[0].'" name="'.$row[0].'" value="'.$this->mysqli_result($resTipoVenta,0,$row[0]).'" required>
 								<span class="input-group-addon">.00</span>
 							</div>
 						</div>
@@ -1687,21 +1688,21 @@ class Servicios {
 
 											<select class="form-control" id="'.$campo.'" name="'.$campo.'">
 												';
-												if (mysql_result($resTipoVenta,0,$campo) == 'SuperAdmin') {
+												if ($this->mysqli_result($resTipoVenta,0,$campo) == 'SuperAdmin') {
 													$formTabla = $formTabla.'
 														<option value="SuperAdmin" selected>SuperAdmin</option>
 														<option value="Administrador">Administrador</option>
 														<option value="Empleado">Empleado</option>
 													';
 												}
-												if (mysql_result($resTipoVenta,0,$campo) == 'Administrador') {
+												if ($this->mysqli_result($resTipoVenta,0,$campo) == 'Administrador') {
 													$formTabla = $formTabla.'
 														<option value="SuperAdmin">SuperAdmin</option>
 														<option value="Administrador" selected>Administrador</option>
 														<option value="Empleado">Empleado</option>
 													';
 												}
-												if (mysql_result($resTipoVenta,0,$campo) == 'Empleado') {
+												if ($this->mysqli_result($resTipoVenta,0,$campo) == 'Empleado') {
 													$formTabla = $formTabla.'
 														<option value="SuperAdmin">SuperAdmin</option>
 														<option value="Administrador">Administrador</option>
@@ -1730,8 +1731,8 @@ class Servicios {
 								$formRefDivDos = "</select></div></div>";
 								$formOption = "";
 
-								while ($rowRef = mysql_fetch_array($resRef)) {
-									if (mysql_result($resTipoVenta,0,$campo) == $rowRef[0]) {
+								while ($rowRef = mysqli_fetch_array($resRef)) {
+									if ($this->mysqli_result($resTipoVenta,0,$campo) == $rowRef[0]) {
 										$formOption = $formOption."<option value='".$rowRef[0]."' selected>".$rowRef[1]."</option>";
 									} else {
 										$formOption = $formOption."<option value='".$rowRef[0]."'>".$rowRef[1]."</option>";
@@ -1749,7 +1750,7 @@ class Servicios {
 									<div class="form-group col-md-6">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-12">
-											<input type="text" class="form-control" value="'.(mysql_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+											<input type="text" class="form-control" value="'.($this->mysqli_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
 										</div>
 									</div>
 
@@ -1862,7 +1863,7 @@ class Servicios {
 
 			$form	=	'';
 
-			while ($row = mysql_fetch_array($res)) {
+			while ($row = mysqli_fetch_array($res)) {
 				$label = $row[0];
 				$i = 0;
 
@@ -1897,7 +1898,7 @@ class Servicios {
 							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
 							<div class="input-group col-md-12">
 								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" required>
+								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.$this->mysqli_result($resMod,0,$row[0]).'" required>
 								<span class="input-group-addon">.00</span>
 							</div>
 						</div>
@@ -1933,10 +1934,10 @@ class Servicios {
 								$campo = strtolower($row[0]);
 
 								$activo = '';
-								if (mysql_result($resMod,0,$row[0])==1){
+								if ($this->mysqli_result($resMod,0,$row[0])==1){
 									$activo = 'checked';
 								}
-								$valorBit = mysql_result($resMod,0,$row[0]);
+								$valorBit = $this->mysqli_result($resMod,0,$row[0]);
 
 								$form	=	$form.'
 
@@ -1970,7 +1971,7 @@ class Servicios {
 									<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 margTop">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-6">
-											<input class="form-control date" type="text" value="'.mysql_result($resMod,0,$row[0]).'" name="'.$campo.'" id="'.$campo.'" '.$lblObligatorio.'/>
+											<input class="form-control date" type="text" value="'.$this->mysqli_result($resMod,0,$row[0]).'" name="'.$campo.'" id="'.$campo.'" '.$lblObligatorio.'/>
 										</div>
 
 									</div>
@@ -2001,7 +2002,7 @@ class Servicios {
 										<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 											<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 											<div class="input-group bootstrap-timepicker col-md-6">
-												<input id="timepicker2" value="'.mysql_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
+												<input id="timepicker2" value="'.$this->mysqli_result($resMod,0,$row[0]).'" name="'.$campo.'" class="form-control">
 												<span class="input-group-addon">
 <span class="glyphicon glyphicon-time"></span>
 </span>
@@ -2021,7 +2022,7 @@ class Servicios {
 											<div class="form-group col-md-6" style="display:'.$lblOculta.'">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea readonly="readonly" type="text" rows="2" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea readonly="readonly" type="text" rows="2" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.($this->mysqli_result($resMod,0,$row[0])).'</textarea>
 												</div>
 
 											</div>
@@ -2059,7 +2060,7 @@ class Servicios {
 													<label class="form-label">'.$label.'</label>
 													<div class="form-group">
 														<div class="form-line">
-															<input readonly="readonly" value="'.(mysql_result($resMod,0,$row[0])).'" type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
+															<input readonly="readonly" value="'.($this->mysqli_result($resMod,0,$row[0])).'" type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" '.$lblObligatorio.'>
 
 														</div>
 													</div>
@@ -2080,7 +2081,7 @@ class Servicios {
 					$camposEscondido = $camposEscondido.'';
 				}
 			}
-			/* <input type="text" value="'.(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
+			/* <input type="text" value="'.($this->mysqli_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>  ///////////////////////////////  verificar al subir al servidor   /////////////////////////////////*/
 			$formulario = $form."<br><br>".$camposEscondido;
 
 			return $formulario;
@@ -2113,16 +2114,16 @@ class Servicios {
 
 		$respusu = mysql_query($sqlusu,$conn) or die (mysql_error(1));;
 
-		$filas = mysql_num_rows($respusu);
+		$filas = mysqli_num_rows($respusu);
 
 		if ($filas > 0) {
-			$sqlpass = "select * from dbusuarios where Pass = '".$pass."' and idusuario = ".mysql_result($respusu,0,0);
+			$sqlpass = "select * from dbusuarios where Pass = '".$pass."' and idusuario = ".$this->mysqli_result($respusu,0,0);
 		    //echo $sqlpass;
 		    $error = 1;
 
 			$resppass = mysql_query($sqlpass,$conn) or die (mysql_error(1));;
 
-			$filas2 = mysql_num_rows($resppass);
+			$filas2 = mysqli_num_rows($resppass);
 
 			if ($filas2 > 0) {
 				$error = 1;
@@ -2166,7 +2167,17 @@ class Servicios {
 		$this-> query($sql,0);
 	}
 
-
+	function mysqli_result($res,$row=0,$col=0){
+	    $numrows = mysqli_num_rows($res);
+	    if ($numrows && $row <= ($numrows-1) && $row >=0){
+	        mysqli_data_seek($res,$row);
+	        $resrow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+	        if (isset($resrow[$col])){
+	            return $resrow[$col];
+	        }
+	    }
+	    return false;
+	}
 
 	function query($sql,$accion) {
 
@@ -2179,14 +2190,20 @@ class Servicios {
 		$username	= $datos['username'];
 		$password	= $datos['password'];
 
+		//$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysqli_error());
+		$conex = mysqli_connect($hostname,$username,$password, $database);
 
-		$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysql_error());
+		if (!$conex) {
+		    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+		    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+		    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+		    exit;
+		}
+		//mysql_select_db($database);
 
-		mysql_select_db($database);
-		mysql_query("SET NAMES 'utf8'");
-		        $error = 0;
-		mysql_query("BEGIN");
-		$result=mysql_query($sql,$conex);
+		$error = 0;
+		mysqli_query($conex,"BEGIN");
+		$result=mysqli_query($conex,$sql);
 		if ($accion && $result) {
 			$result = mysql_insert_id();
 		}
@@ -2194,13 +2211,15 @@ class Servicios {
 			$error=1;
 		}
 		if($error==1){
-			mysql_query("ROLLBACK");
+			mysqli_query($conex,"ROLLBACK");
 			return false;
 		}
 		 else{
-			mysql_query("COMMIT");
+			mysqli_query($conex,"COMMIT");
 			return $result;
 		}
+
+		mysqli_close($conex);
 
 	}
 

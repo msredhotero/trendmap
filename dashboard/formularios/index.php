@@ -34,15 +34,15 @@ $resMenu = $serviciosHTML->menu($_SESSION['nombre_sahilices'],"Formularios",$_SE
 
 $configuracion = $serviciosReferencias->traerConfiguracion();
 
-$tituloWeb = mysql_result($configuracion,0,'sistema');
+$tituloWeb = $serviciosReferencias->mysqli_result($configuracion,0,'sistema');
 
 $breadCumbs = '<a class="navbar-brand" href="../index.php">Dashboard</a>';
 
 $resLeyendas = $serviciosReferencias->traerLeyendasUna();
 
-$leyenda1 = mysql_result($resLeyendas,0,'leyenda1');
-$leyenda2 = mysql_result($resLeyendas,0,'leyenda2');
-$leyenda3 = mysql_result($resLeyendas,0,'leyenda3');
+$leyenda1 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda1');
+$leyenda2 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda2');
+$leyenda3 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda3');
 
 /////////////////////// Opciones pagina ///////////////////////////////////////////////
 $singular = "Formulario";
@@ -61,14 +61,14 @@ $modificar = "modificarFormularios";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbformularios";
 
-$lblCambio	 	= array("refrespuestas",'telefono','apellido','email','nombre','aceptacondiciones','opcion2','opcion3');
-$lblreemplazo	= array("¿Qué mar baña Barcelona? *",'Número de teléfono','Apellidos *','Correo Electrónico *','Nombre *',$leyenda1,$leyenda2,$leyenda3);
+$lblCambio	 	= array('telefono','apellido','email','nombre','aceptacondiciones','opcion2','opcion3');
+$lblreemplazo	= array('Número de teléfono','Apellidos *','Correo Electrónico *','Nombre *',$leyenda1,$leyenda2,$leyenda3);
 
 
-$cadRef 	= '<option value="1">Atlántico</option><option value="2">Cantábrico</option><option value="3">Mediterráneo</option>';
+$cadRef 	= '';
 
-$refdescripcion = array(0=>$cadRef);
-$refCampo 	=  array('refrespuestas');
+$refdescripcion = array();
+$refCampo 	=  array();
 
 $frmUnidadNegocios 	= $serviciosFunciones->camposTablaViejo($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
@@ -197,6 +197,11 @@ $frmUnidadNegocios 	= $serviciosFunciones->camposTablaViejo($insertar ,$tabla,$l
 												<span>NUEVO</span>
 											</button>
 
+											<button type="button" class="btn bg-green waves-effect btnExportar">
+												<i class="material-icons">description</i>
+												<span>EXPORTAR</span>
+											</button>
+
 										</div>
 									</div>
 								</div>
@@ -206,7 +211,6 @@ $frmUnidadNegocios 	= $serviciosFunciones->camposTablaViejo($insertar ,$tabla,$l
 									<table id="example" class="display table " style="width:100%">
 										<thead>
 											<tr>
-												<th>Respuesta</th>
 												<th>Nombre</th>
 												<th>Apellidos</th>
 												<th>Tel.</th>
@@ -216,7 +220,6 @@ $frmUnidadNegocios 	= $serviciosFunciones->camposTablaViejo($insertar ,$tabla,$l
 										</thead>
 										<tfoot>
 											<tr>
-												<th>Respuesta</th>
 												<th>Nombre</th>
 												<th>Apellidos</th>
 												<th>Tel.</th>
@@ -355,6 +358,10 @@ $frmUnidadNegocios 	= $serviciosFunciones->camposTablaViejo($insertar ,$tabla,$l
 					"sortDescending": ": activate to sort column descending"
 				}
 			}
+		});
+
+		$(".btnExportar").click(function(event) {
+			window.open("../../reportes/rptParticipantes.php" ,'_blank');
 		});
 
 		$('#leyenda1').val('<?php echo $leyenda1; ?>');

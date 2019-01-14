@@ -15,7 +15,7 @@ function menu($usuario,$titulo,$rol,$empresa) {
 
 
 	$cant = 1;
-	while ($row = mysql_fetch_array($res)) {
+	while ($row = mysqli_fetch_array($res)) {
 		if ($titulo == $row['nombre']) {
 			$nombre = $row['nombre'];
 			$row['url'] = "index.php";
@@ -54,7 +54,7 @@ function menu($usuario,$titulo,$rol,$empresa) {
 	}
 
 
-	
+
 
 
 
@@ -109,7 +109,7 @@ function validacion($tabla) {
 		$jquery	=	'';
 		$cuerpoValidacion = '';
 
-		while ($row = mysql_fetch_array($res)) {
+		while ($row = mysqli_fetch_array($res)) {
 			if (($row[3] != 'PRI') && ($row[2] == 'NO')) {
 				if (strpos($row[1],"decimal") !== false) {
 					//debo validar que sea un numero
@@ -275,33 +275,59 @@ function footer() {
 </div><!--fin del footer-->";
 }
 
+function mysqli_result($res,$row=0,$col=0){
+	    $numrows = mysqli_num_rows($res);
+	    if ($numrows && $row <= ($numrows-1) && $row >=0){
+	        mysqli_data_seek($res,$row);
+	        $resrow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+	        if (isset($resrow[$col])){
+	            return $resrow[$col];
+	        }
+	    }
+	    return false;
+	}
+
 function query($sql,$accion) {
 
-		require_once 'appconfig.php';
+	require_once 'appconfig.php';
 
-		$appconfig	= new appconfig();
-		$datos		= $appconfig->conexion();
-		$hostname	= $datos['hostname'];
-		$database	= $datos['database'];
-		$username	= $datos['username'];
-		$password	= $datos['password'];
+	$appconfig	= new appconfig();
+	$datos		= $appconfig->conexion();
+	$hostname	= $datos['hostname'];
+	$database	= $datos['database'];
+	$username	= $datos['username'];
+	$password	= $datos['password'];
 
-/*		$hostname = "localhost";
-		$database = "lacalder_diablo";
-		$username = "lacalderadeldiab";
-		$password = "caldera4415";
-		*/
+	//$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysql_error());
+	$conex = mysqli_connect($hostname,$username,$password, $database);
 
-		$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysql_error());
+	if (!$conex) {
+		 echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+		 echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+		 echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+		 exit;
+	}
+	//mysql_select_db($database);
 
-		mysql_select_db($database);
-
-		$result = mysql_query($sql,$conex);
-		if ($accion && $result) {
-			$result = mysql_insert_id();
-		}
-		mysql_close($conex);
+	$error = 0;
+	mysqli_query($conex,"BEGIN");
+	$result=mysqli_query($conex,$sql);
+	if ($accion && $result) {
+		$result = mysqli_insert_id($conex);
+	}
+	if(!$result){
+		$error=1;
+	}
+	if($error==1){
+		mysqli_query($conex,"ROLLBACK");
+		return false;
+	}
+	 else{
+		mysqli_query($conex,"COMMIT");
 		return $result;
+	}
+
+	mysqli_close($conex);
 
 	}
 

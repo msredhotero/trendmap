@@ -93,7 +93,7 @@ class BaseHTML {
 
       $cad = '<ul class="menu tasks">';
 
-      while ($row = mysql_fetch_array($datos)) {
+      while ($row = mysqli_fetch_array($datos)) {
          $cad .= '<li>
             <a href="javascript:void(0);">
                <h4>

@@ -34,7 +34,7 @@ $resMenu = $serviciosHTML->menu($_SESSION['nombre_sahilices'],"Leyendas",$_SESSI
 
 $configuracion = $serviciosReferencias->traerConfiguracion();
 
-$tituloWeb = mysql_result($configuracion,0,'sistema');
+$tituloWeb = $serviciosReferencias->mysqli_result($configuracion,0,'sistema');
 
 $breadCumbs = '<a class="navbar-brand" href="../index.php">Dashboard</a>';
 

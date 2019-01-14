@@ -112,32 +112,19 @@ function frmAjaxModificar($serviciosFunciones, $serviciosReferencias) {
          $resLeyendas = $serviciosReferencias->traerLeyendasUna();
          $resultado = $serviciosReferencias->traerFormulariosPorId($id);
 
-         $leyenda1 = mysql_result($resLeyendas,0,'leyenda1');
-         $leyenda2 = mysql_result($resLeyendas,0,'leyenda2');
-         $leyenda3 = mysql_result($resLeyendas,0,'leyenda3');
+         $leyenda1 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda1');
+         $leyenda2 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda2');
+         $leyenda3 = $serviciosReferencias->mysqli_result($resLeyendas,0,'leyenda3');
 
-         $lblCambio	 	= array("refrespuestas",'telefono','apellido','email','nombre','aceptacondiciones','opcion2','opcion3');
-         $lblreemplazo	= array("¿Qué mar baña Barcelona? *",'Número de teléfono','Apellidos *','Correo Electrónico *','Nombre *',$leyenda1,$leyenda2,$leyenda3);
+         $lblCambio	 	= array('telefono','apellido','email','nombre','aceptacondiciones','opcion2','opcion3');
+         $lblreemplazo	= array('Número de teléfono','Apellidos *','Correo Electrónico *','Nombre *',$leyenda1,$leyenda2,$leyenda3);
          $cadRef = '';
 
-         switch (mysql_result($resultado,0,'refrespuestas')) {
-            case 'Atlantico':
-               $cadRef = '<option value="1" selected>Atlántico</option><option value="2">Cantábrico</option><option value="3">Mediterráneo</option>';
-               break;
-            case 'Cantabrico':
-               $cadRef = '<option value="1">Atlántico</option><option value="2" selected>Cantábrico</option><option value="3">Mediterráneo</option>';
-               break;
-            case 'Mediterraneo':
-               $cadRef = '<option value="1">Atlántico</option><option value="2">Cantábrico</option><option value="3" selected>Mediterráneo</option>';
-               break;
-            default:
-               // code...
-               break;
-         }
 
 
-         $refdescripcion = array(0=>$cadRef);
-         $refCampo 	=  array('refrespuestas');
+
+         $refdescripcion = array();
+         $refCampo 	=  array();
          break;
 
 
@@ -215,8 +202,6 @@ function frmAjaxNuevo($serviciosFunciones, $serviciosReferencias) {
 function insertarFormularios($serviciosReferencias, $serviciosValidador) {
    $error = '';
 
-   $refrespuestas = $_POST['refrespuestas'];
-
    if ($_POST['nombre'] == '') {
       $error .= 'Es obligatorio el campo Nombre.
       ';
@@ -264,7 +249,7 @@ function insertarFormularios($serviciosReferencias, $serviciosValidador) {
    $leyenda3 = $_POST['leyenda3'];
 
    if ($error == '') {
-      $res = $serviciosReferencias->insertarFormularios($refrespuestas,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3);
+      $res = $serviciosReferencias->insertarFormularios($nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3);
 
       if ((integer)$res > 0) {
          echo '';
@@ -280,7 +265,7 @@ function insertarFormularios($serviciosReferencias, $serviciosValidador) {
 
 function modificarFormularios($serviciosReferencias) {
 $id = $_POST['id'];
-$refrespuestas = $_POST['refrespuestas'];
+
 $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 $telefono = $_POST['telefono'];
@@ -303,7 +288,7 @@ $opcion3 = 0;
 $leyenda1 = $_POST['leyenda1'];
 $leyenda2 = $_POST['leyenda2'];
 $leyenda3 = $_POST['leyenda3'];
-$res = $serviciosReferencias->modificarFormularios($id,$refrespuestas,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3);
+$res = $serviciosReferencias->modificarFormularios($id,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3);
 if ($res == true) {
 echo '';
 } else {
@@ -327,7 +312,7 @@ function eliminarFormularios($serviciosReferencias) {
 function traerFormularios($serviciosReferencias) {
 $res = $serviciosReferencias->traerFormularios();
 $ar = array();
-while ($row = mysql_fetch_array($res)) {
+while ($row = mysqli_fetch_array($res)) {
 array_push($ar, $row);
 }
 $resV['datos'] = $ar;
@@ -377,7 +362,7 @@ function eliminarLeyendas($serviciosReferencias) {
 function traerLeyendas($serviciosReferencias) {
 $res = $serviciosReferencias->traerLeyendas();
 $ar = array();
-while ($row = mysql_fetch_array($res)) {
+while ($row = mysqli_fetch_array($res)) {
 array_push($ar, $row);
 }
 $resV['datos'] = $ar;
@@ -392,7 +377,7 @@ echo json_encode($resV);
 function toArray($query)
 {
     $res = array();
-    while ($row = @mysql_fetch_array($query)) {
+    while ($row = @mysqli_fetch_array($query)) {
         $res[] = $row;
     }
     return $res;

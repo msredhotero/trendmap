@@ -86,7 +86,7 @@ class ServiciosReferencias {
 
 	    $res = $this->query($sql,0);
 
-	    if (mysql_num_rows($res)>0) {
+	    if (mysqli_num_rows($res)>0) {
 	        return 1;
 	    }
 	    return 0;
@@ -96,8 +96,8 @@ class ServiciosReferencias {
 
 	    $res = $this->query($sql,0);
 
-	    if (mysql_num_rows($res)>0) {
-	        return mysql_result($res,0,0);
+	    if (mysqli_num_rows($res)>0) {
+	        return $this->mysqli_result($res,0,0);
 	    }
 	    return 0;
 	}
@@ -160,18 +160,18 @@ class ServiciosReferencias {
 
 	/* PARA Formularios */
 
-	function insertarFormularios($refrespuestas,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3) {
-	$sql = "insert into dbformularios(idformulario,refrespuestas,nombre,apellido,telefono,email,aceptacondiciones,opcion2,opcion3,leyenda1,leyenda2,leyenda3)
-	values ('',".$refrespuestas.",'".($nombre)."','".($apellido)."','".($telefono)."','".($email)."',".$aceptacondiciones.",".$opcion2.",".$opcion3.",'".($leyenda1)."','".($leyenda2)."','".($leyenda3)."')";
+	function insertarFormularios($nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3) {
+	$sql = "insert into dbformularios(idformulario,nombre,apellido,telefono,email,aceptacondiciones,opcion2,opcion3,leyenda1,leyenda2,leyenda3)
+	values ('','".($nombre)."','".($apellido)."','".($telefono)."','".($email)."',".$aceptacondiciones.",".$opcion2.",".$opcion3.",'".($leyenda1)."','".($leyenda2)."','".($leyenda3)."')";
 	$res = $this->query($sql,1);
 	return $res;
 	}
 
 
-	function modificarFormularios($id,$refrespuestas,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3) {
+	function modificarFormularios($id,$nombre,$apellido,$telefono,$email,$aceptacondiciones,$opcion2,$opcion3,$leyenda1,$leyenda2,$leyenda3) {
 	$sql = "update dbformularios
 	set
-	refrespuestas = ".$refrespuestas.",nombre = '".($nombre)."',apellido = '".($apellido)."',telefono = '".($telefono)."',email = '".($email)."',aceptacondiciones = ".$aceptacondiciones.",opcion2 = ".$opcion2.",opcion3 = ".$opcion3.",leyenda1 = '".($leyenda1)."',leyenda2 = '".($leyenda2)."',leyenda3 = '".($leyenda3)."'
+	nombre = '".($nombre)."',apellido = '".($apellido)."',telefono = '".($telefono)."',email = '".($email)."',aceptacondiciones = ".$aceptacondiciones.",opcion2 = ".$opcion2.",opcion3 = ".$opcion3.",leyenda1 = '".($leyenda1)."',leyenda2 = '".($leyenda2)."',leyenda3 = '".($leyenda3)."'
 	where idformulario =".$id;
 	$res = $this->query($sql,0);
 	return $res;
@@ -196,10 +196,6 @@ class ServiciosReferencias {
 
 		$sql = "select
 		f.idformulario,
-		(case when f.refrespuestas = 1 then 'Atlantico'
-				when f.refrespuestas = 2 then 'Cantabrico'
-				when f.refrespuestas = 3 then 'Mediterraneo'
-		end) as refrespuestas,
 		f.nombre,
 		f.apellido,
 		f.telefono,
@@ -222,7 +218,6 @@ class ServiciosReferencias {
 	function traerFormularios() {
 	$sql = "select
 	f.idformulario,
-	f.refrespuestas,
 	f.nombre,
 	f.apellido,
 	f.telefono,
@@ -234,17 +229,14 @@ class ServiciosReferencias {
 	f.leyenda2,
 	f.leyenda3
 	from dbformularios f
-	order by 1";
+	order by f.apellido, f.nombre";
 	$res = $this->query($sql,0);
 	return $res;
 	}
 
 
 	function traerFormulariosPorId($id) {
-	$sql = "select idformulario,(case when refrespuestas = 1 then 'Atlantico'
-			when refrespuestas = 2 then 'Cantabrico'
-			when refrespuestas = 3 then 'Mediterraneo'
-	end) as refrespuestas,nombre,apellido,telefono,email,aceptacondiciones,opcion2,opcion3,leyenda1,leyenda2,leyenda3 from dbformularios where idformulario =".$id;
+	$sql = "select idformulario,nombre,apellido,telefono,email,aceptacondiciones,opcion2,opcion3,leyenda1,leyenda2,leyenda3 from dbformularios where idformulario =".$id;
 	$res = $this->query($sql,0);
 	return $res;
 	}
@@ -340,10 +332,20 @@ return $res;
 /* Fin */
 /* /* Fin de la Tabla: tbleyendas*/
 
+	function mysqli_result($res,$row=0,$col=0){
+	    $numrows = mysqli_num_rows($res);
+	    if ($numrows && $row <= ($numrows-1) && $row >=0){
+	        mysqli_data_seek($res,$row);
+	        $resrow = (is_numeric($col)) ? mysqli_fetch_row($res) : mysqli_fetch_assoc($res);
+	        if (isset($resrow[$col])){
+	            return $resrow[$col];
+	        }
+	    }
+	    return false;
+	}
 
 
-
-function query($sql,$accion) {
+	function query($sql,$accion) {
 
 
 
@@ -356,13 +358,20 @@ function query($sql,$accion) {
 		$username	= $datos['username'];
 		$password	= $datos['password'];
 
-		$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysql_error());
+		//$conex = mysql_connect($hostname,$username,$password) or die ("no se puede conectar".mysqli_error());
+		$conex = mysqli_connect($hostname,$username,$password, $database);
 
-		mysql_select_db($database);
+		if (!$conex) {
+		    echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
+		    echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
+		    echo "error de depuración: " . mysqli_connect_error() . PHP_EOL;
+		    exit;
+		}
+		//mysql_select_db($database);
 
-		        $error = 0;
-		mysql_query("BEGIN");
-		$result=mysql_query($sql,$conex);
+		$error = 0;
+		mysqli_query($conex,"BEGIN");
+		$result=mysqli_query($conex,$sql);
 		if ($accion && $result) {
 			$result = mysql_insert_id();
 		}
@@ -370,13 +379,15 @@ function query($sql,$accion) {
 			$error=1;
 		}
 		if($error==1){
-			mysql_query("ROLLBACK");
+			mysqli_query($conex,"ROLLBACK");
 			return false;
 		}
 		 else{
-			mysql_query("COMMIT");
+			mysqli_query($conex,"COMMIT");
 			return $result;
 		}
+
+		mysqli_close($conex);
 
 	}
 

@@ -53,7 +53,7 @@ switch ($tabla) {
 		$icon = array('create','delete');
 		$indiceID = 0;
 		$empieza = 1;
-		$termina = 5;
+		$termina = 4;
 
 		break;
 
@@ -64,7 +64,7 @@ switch ($tabla) {
 }
 
 
-$cantidadFilas = mysql_num_rows($res);
+$cantidadFilas = mysqli_num_rows($res);
 
 
 header("content-type: Access-Control-Allow-Origin: *");
@@ -73,7 +73,7 @@ $ar = array();
 $arAux = array();
 $cad = '';
 $id = 0;
-	while ($row = mysql_fetch_array($resAjax)) {
+	while ($row = mysqli_fetch_array($resAjax)) {
 		//$id = $row[$indiceID];
 
 		for ($i=$empieza;$i<=$termina;$i++) {
